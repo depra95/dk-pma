@@ -1,0 +1,23 @@
+version: '3'
+services:
+  nginx:
+    container_name: 'pma-nginx'
+    image: nginx:stable
+    volumes:
+    - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    - ./nginx/certs:/etc/nginx/certs:ro
+    - ./nginx/ssl:/etc/nginx/ssl:ro
+    - ./log/nginx/:/var/log/nginx
+    ports:
+      - 443:443
+    restart: always
+    links:
+      - phpmyadmin
+  phpmyadmin:
+    container_name: 'pma-app'
+    image: phpmyadmin/phpmyadmin:5.2
+    environment:
+     - PMA_HOSTS=localhost
+    ports:
+     - 8080:80
+    restart: always
